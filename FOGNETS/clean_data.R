@@ -4,15 +4,15 @@
 
 #############################################################################################
 setwd("~/Desktop/KaggleScripts/FOGNETS/data/")
-train <- read.csv("train5min.csv")
+train <- read.csv("train_micro_2hr.csv")
 test <- read.csv("test.csv")
+length(train)
+head(train)
 
-str(train[2:10])
-dates<-as.POSIXct(as.character(train$X),format = "%Y-%m-%d %H:%M:%S")
-train$date<-dates
+dates<-as.POSIXct(as.character(train$Date),format = "%m/%d/%y %H:%M")
+train$Date<-dates
 names(train)
 library(xts)
-x <- xts(train[2:10],order.by=as.Date(train$date, "%Y-%m-%d %H:%M:%S"))
-
-class(x)
+x <- xts(train[0:11],order.by=as.Date(train$Date, "%Y-%m-%d %H:%M:%S"))
 str(x)
+x[12:1]
