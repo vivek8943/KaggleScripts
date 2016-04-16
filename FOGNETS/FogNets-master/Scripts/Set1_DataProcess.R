@@ -1,14 +1,15 @@
 
 #### Read in Data ####
 # Macroclimate Data
-guel <- read.csv("F:\\Data Science\\FogNets\\Data\\macro_guelmim.csv")
-sidi <- read.csv("F:\\Data Science\\FogNets\\Data\\macro_sidi.csv")
+setwd("~/Desktop/KaggleScripts/FOGNETS/data/")
+guel <- read.csv("~/Desktop/KaggleScripts/FOGNETS/data/macro_guelmim.csv")
+sidi <- read.csv("~/Desktop/KaggleScripts/FOGNETS/data/macro_sidi.csv")
 
 # Microclimate Data
-train.2hr <- read.csv("F:\\Data Science\\FogNets\\Data\\train_micro_2hr.csv")
+train.2hr <- read.csv("~/Desktop/KaggleScripts/FOGNETS/data/train_micro_2hr.csv")
 
 # Water yield
-yield <- read.csv("F:\\Data Science\\FogNets\\Data\\wateryield.csv")
+yield <- read.csv("~/Desktop/KaggleScripts/FOGNETS/data/wateryield.csv")
 
 #### Preprocessing MICROclimate data ####
 library(dplyr);
@@ -42,6 +43,12 @@ train <- select(train, -X)
 guel <- rename(guel, x=Local.time.in.Guelmim)
 guel$x.ct <- as.POSIXct(guel$x, format = "%Y-%m-%d %H:%M:%S")
 guel$x.lt <- as.POSIXlt(guel$x, format = "%Y-%m-%d %H:%M:%S")
+
+str(train)
+head(guel)
+train<-as.ts(train)
+str(train)
+
 
 
 # Reduce to Set 1 - microclimate data is available
