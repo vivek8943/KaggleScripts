@@ -13,21 +13,32 @@ guel["hour"]=timemacro.hour
 str(guel)
 
 gueldates<-as.POSIXct(as.character(train$Date),format = "%m/%d/%y %H:%M")
-time.poslt <- as.POSIXlt(dates);
+time.poslt <- as.POSIXlt(gueldates);
 time.hour <- time.poslt$hour
 train["hour"]=time.hour
 train["X"]=NULL
 train$hour=as.factor(train$hour)
 str(train)
+
 # Merge Data frames based on DAte
 
 colnames.guel<-names(guel)
 colnames.guel[1]="Date"
 colnames(guel)=colnames.guel
 
-merged.df=merge(guel, train, by=c('Date','hour'))
+library(dplyr)
+merged.df <- left_join(train, guel, by="Date")
+head(merged.df)
 str(merged.df)
 
+
+
+
+demo.df<-as.data.frame(train['Date'])
+demo.df['date2']=merged.df['Date']
+
+
+write.csv(merged.df,"merged.csv")
 
 ######################################################################################################
 #Time Series
