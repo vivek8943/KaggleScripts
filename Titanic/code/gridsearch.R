@@ -2,25 +2,27 @@
 library(h2oEnsemble)  # Requires version >=0.1.8 of h2oEnsemble
 library(h2o)
 localH2O = h2o.init(nthreads = 4, max_mem_size = "6g") # Start an H2O cluster with nthreads = num cores on your machine
+setwd("~/Desktop/KaggleScripts/Rang/")
+train <- read.csv("train.csv")
+test <- read.csv("test.csv")
+str(train)
+y_train=names(train[257])
+x_train=names(train[1:256])
 
-
-h20.train<-as.h2o(trainmice) 
+h20.train<-as.h2o(train) 
 train<-h20.train
-h20.test<-as.h2o(testmice)  
+h20.test<-as.h2o(test)  
 test<-h20.test
-train['Ticket']=NULL
-test['Ticket']=NULL
-
-head(train)
-test['Survived']=0
-y <- c("Survived","PassengerId","Cabin","Embarked")
-x <- setdiff(names(h20.train), y)
-y<-"Survived"
-family <- "binomial"
+test["Active_Customer"]=0
+str(test)
+head(test)
 #For binary classification, response should be a factor
-train[,y] <- as.factor(train[,y])
-test[,y] <- as.factor(test[,y])
+train[,y_train] <- as.factor(train[,y_train])
+test[,y_train] <- as.factor(test[,y_train])
 # Specify the base learner library & the metalearner
+
+
+
 
 
 # Random Grid Search (e.g. 120 second maximum)
@@ -34,17 +36,17 @@ search_criteri <- list(strategy = "RandomDiscrete",
 
 
 # GBM Hyperparamters
-learn_rate_opt <- c(0.01, 0.03) 
-max_depth_opt <- c(3, 4, 5, 6, 9)
+learn_rate_opt <- c(0.01, 0.1) 
+max_depth_opt <- c(3, 4, 5)
 sample_rate_opt <- c(0.7, 0.8, 0.9, 1.0)
 col_sample_rate_opt <- c(0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8)
-ntrees<-c(100,90,150)
-nfolds <- 4
+ntrees<-c(200,100)
+nfolds <- 3
 hyper_params <- list(learn_rate = learn_rate_opt,
                      max_depth = max_depth_opt, 
                      sample_rate = sample_rate_opt,
                      col_sample_rate = col_sample_rate_opt,ntrees=ntrees)
-gbm_grid <- h2o.grid("gbm", x = x, y = y,
+gbm_grid <- h2o.grid("gbm", x = x_train, y = y_train,
                      training_frame = train,
                      seed = 1,
                      nfolds = nfolds,
