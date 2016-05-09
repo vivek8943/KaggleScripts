@@ -1,0 +1,13 @@
+Train = readtable('Rangtrain.csv');
+Test = readtable('Rangtest.csv');
+
+
+Y_train = Train.Active_Customer;    
+X_train = Train(:,1:255);                   % select predictor variables
+X_test = Test(:,1:255);      
+
+t = templateTree('Surrogate','on');
+ens = fitensemble(X_train,Y_train,'CategoricalPredictors',categoricalPredictors,'LogitBoost',250,t);
+pred=ens.predict(X_test);
+
+categoricalPredictors = {'Cust_status','Trans24','Trans25','Trans26','Trans27','Promotion37','Active_Customer'};

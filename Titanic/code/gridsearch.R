@@ -177,10 +177,10 @@ h2o.glm_nn <- function(..., non_negative = TRUE) {
 metalearner <- "h2o.gbm.wrapper"
 
 
-learner <- c("h2o.randomForest.4","h2o.gbm.best")
+learner <- c("h2o.randomForest.4","h2o.gbm.wrapper")
 gc()
 fit <- h2o.ensemble(x = x, y = y,
-                    training_frame = train,
+                    training_frame = training.data.hex,
                     family = "binomial",
                     learner = learner,
                     metalearner = metalearner,
